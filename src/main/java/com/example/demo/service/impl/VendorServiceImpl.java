@@ -20,10 +20,9 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor createVendor(Vendor vendor) {
 
-        vendorRepository.findByVendorName(vendor.getVendorName())
-                .ifPresent(v -> {
-                    throw new IllegalArgumentException("Vendor already exists");
-                });
+        if (vendorRepository.findByVendorName(vendor.getVendorName()).isPresent()) {
+            throw new IllegalArgumentException("Vendor already exists");
+        }
 
         vendor.setCreatedAt(LocalDateTime.now());
         return vendorRepository.save(vendor);

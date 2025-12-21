@@ -24,6 +24,7 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         this.assetRepository = assetRepository;
     }
 
+    // STEP 1: Dispose asset (request)
     @Override
     public AssetDisposal disposeAsset(Long assetId, AssetDisposal disposal) {
 
@@ -31,8 +32,27 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
 
         disposal.setAsset(asset);
+        disposal.setStatus("PENDING");
         disposal.setCreatedAt(LocalDateTime.now());
 
+        asset.setStatus("DISPOSAL_REQUESTED");
+        assetRepository.save(asset);
+
+        return disposalRepository.save(disposal);
+    }
+
+    // STEP 2: Approve disposal
+    @Override
+    public AssetDisposal approveDisposal(Long assetId, Long approverId) {
+
+        AssetDisposal disposal = disposalRepository.findByAssetId(assetId)
+                .orElseThrow(() -> new ResourceNotFoundException("Disposal request not found"));
+
+        disposal.setApprovedBy(approverId);
+        disposal.setApprovedAt(LocalDateTime.now());
+        disposal.setStatus("APPROVED");
+
+        Asset asset = disposal.getAsset();
         asset.setStatus("DISPOSED");
         assetRepository.save(asset);
 

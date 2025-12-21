@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+package
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.User;

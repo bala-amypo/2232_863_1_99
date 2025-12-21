@@ -20,11 +20,9 @@ public class AssetServiceImpl implements AssetService {
     private final VendorRepository vendorRepository;
     private final DepreciationRuleRepository ruleRepository;
 
-    public AssetServiceImpl(
-            AssetRepository assetRepository,
-            VendorRepository vendorRepository,
-            DepreciationRuleRepository ruleRepository) {
-
+    public AssetServiceImpl(AssetRepository assetRepository,
+                            VendorRepository vendorRepository,
+                            DepreciationRuleRepository ruleRepository) {
         this.assetRepository = assetRepository;
         this.vendorRepository = vendorRepository;
         this.ruleRepository = ruleRepository;
@@ -40,7 +38,7 @@ public class AssetServiceImpl implements AssetService {
                 .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
 
         if (asset.getPurchaseCost() <= 0) {
-            throw new IllegalArgumentException("Purchase cost must be greater than zero");
+            throw new IllegalArgumentException("Purchase cost must be greater than 0");
         }
 
         if (assetRepository.existsByAssetTag(asset.getAssetTag())) {
@@ -61,13 +59,13 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Asset getAsset(Long id) {
-        return assetRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+    public List<Asset> getAssetsByStatus(String status) {
+        return assetRepository.findByStatus(status);
     }
 
     @Override
-    public List<Asset> getAssetsByStatus(String status) {
-        return assetRepository.findByStatus(status);
+    public Asset getAssetById(Long id) {
+        return assetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
     }
 }

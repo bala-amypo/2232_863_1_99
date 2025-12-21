@@ -16,20 +16,20 @@ import java.util.List;
 @Service
 public class AssetServiceImpl implements AssetService {
 
-    private final AssetRepository assetRepository;
+    private final AssetRepository AssetRepository;
     private final VendorRepository vendorRepository;
     private final DepreciationRuleRepository ruleRepository;
 
-    public AssetServiceImpl(AssetRepository assetRepository,
+    public AssetServiceImpl(AssetRepository AssetRepository,
                             VendorRepository vendorRepository,
                             DepreciationRuleRepository ruleRepository) {
-        this.assetRepository = assetRepository;
+        this.AssetRepository = AssetRepository;
         this.vendorRepository = vendorRepository;
         this.ruleRepository = ruleRepository;
     }
 
     @Override
-    public Asset createAsset(Long vendorId, Long ruleId, Asset sset) {
+    public Asset createAsset(Long vendorId, Long ruleId, Asset Asset) {
 
         Vendor vendor = vendorRepository.findById(vendorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
@@ -37,35 +37,35 @@ public class AssetServiceImpl implements AssetService {
         DepreciationRule rule = ruleRepository.findById(ruleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
 
-        if (asset.getPurchaseCost() <= 0) {
+        if (Asset.getPurchaseCost() <= 0) {
             throw new IllegalArgumentException("Purchase cost must be greater than 0");
         }
 
-        if (assetRepository.existsByAssetTag(asset.getAssetTag())) {
+        if (AssetRepository.existsByAssetTag(Asset.getAssetTag())) {
             throw new IllegalArgumentException("Asset tag already exists");
         }
 
-        asset.setVendor(vendor);
-        asset.setDepreciationRule(rule);
-        asset.setStatus("ACTIVE");
-        asset.setCreatedAt(LocalDateTime.now());
+        Asset.setVendor(vendor);
+        Asset.setDepreciationRule(rule);
+        Asset.setStatus("ACTIVE");
+        Asset.setCreatedAt(LocalDateTime.now());
 
-        return assetRepository.save(asset);
+        return AssetRepository.save(Asset);
     }
 
     @Override
     public List<Asset> getAllAssets() {
-        return assetRepository.findAll();
+        return AssetRepository.findAll();
     }
 
     @Override
     public List<Asset> getAssetsByStatus(String status) {
-        return assetRepository.findByStatus(status);
+        return AssetRepository.findByStatus(status);
     }
 
     @Override
     public Asset getAssetById(Long id) {
-        return assetRepository.findById(id)
+        return AssetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
     }
 }

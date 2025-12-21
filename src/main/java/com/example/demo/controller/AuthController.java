@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 import java.util.stream.Collectors;
-import com.example.demo.dto.getEmail;
+
 
 @RestController
 @RequestMapping("/auth")

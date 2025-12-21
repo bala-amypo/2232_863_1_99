@@ -1,5 +1,4 @@
 package com.example.demo.controller;
-
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.User;
@@ -14,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/auth")
+
 public class AuthController {
     
     private final UserService userService;

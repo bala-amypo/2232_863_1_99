@@ -29,7 +29,7 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Asset createAsset(Long vendorId, Long ruleId, Asset asset) {
+    public Asset createAsset(Long vendorId, Long ruleId, Asset sset) {
 
         Vendor vendor = vendorRepository.findById(vendorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));

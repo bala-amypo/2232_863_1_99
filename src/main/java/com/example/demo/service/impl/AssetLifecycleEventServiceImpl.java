@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class AssetLifecycleEventServiceImpl implements AssetLifecycleEventService {
+public Class AssetLifecycleEventServiceImpl implements AssetLifecycleEventService {
     
     private final AssetLifecycleEventRepository eventRepository;
     private final AssetRepository assetRepository;

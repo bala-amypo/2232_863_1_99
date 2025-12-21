@@ -24,7 +24,6 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         this.assetRepository = assetRepository;
     }
 
-    // STEP 1: Dispose asset (request)
     @Override
     public AssetDisposal disposeAsset(Long assetId, AssetDisposal disposal) {
 
@@ -41,7 +40,6 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         return disposalRepository.save(disposal);
     }
 
-    // STEP 2: Approve disposal
     @Override
     public AssetDisposal approveDisposal(Long assetId, Long approverId) {
 

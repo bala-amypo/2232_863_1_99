@@ -10,47 +10,48 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
-
+    
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+    
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
+    
     @Override
     public User registerUser(User user) {
-
-        userRepository.findByEmail(user.getEmail())
-                .ifPresent(u -> {
-                    throw new IllegalArgumentException("Email already exists");
-                });
-
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
-
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+        
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Set.of(userRole));
         user.setCreatedAt(LocalDateTime.now());
-
+        
+        if (user.getRoles().isEmpty()) {
+            Role userRole = roleRepository.findByName("USER")
+                    .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+            Set<Role> roles = new HashSet<>();
+            roles.add(userRole);
+            user.setRoles(roles);
+        }
+        
         return userRepository.save(user);
     }
-
+    
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
-
+    
     @Override
     public User findById(Long id) {
         return userRepository.findById(id)

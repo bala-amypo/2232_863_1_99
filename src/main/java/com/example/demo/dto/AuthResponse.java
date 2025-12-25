@@ -15,4 +15,20 @@ public class AuthResponse {
         this.username = username;
         this.roles = roles;
     }
+
+    public String getToken() {
+        return token;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
 }

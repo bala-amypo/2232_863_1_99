@@ -4,6 +4,6 @@ import com.example.demo.entity.AssetLifecycleEvent;
 import java.util.List;
 
 public interface AssetLifecycleEventService {
-
-    List<AssetLifecycleEvent> getAllEvents();
+    AssetLifecycleEvent logEvent(Long assetId, AssetLifecycleEvent event);
+    List<AssetLifecycleEvent> getEventsForAsset(Long assetId);
 }

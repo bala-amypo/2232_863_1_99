@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "depreciation_rules")
@@ -10,22 +11,28 @@ public class DepreciationRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Used by repository: findByName(...)
     @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
-    private Double rate;
+    private Integer usefulLifeYears;
 
-    // Constructors
+    @Column(nullable = false)
+    private Double salvageValue;
+
+    @Column(nullable = false)
+    private String method;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    // ===== Constructors =====
     public DepreciationRule() {
     }
 
-    public DepreciationRule(String name, Double rate) {
-        this.name = name;
-        this.rate = rate;
-    }
+    // ===== Getters & Setters =====
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -42,11 +49,35 @@ public class DepreciationRule {
         this.name = name;
     }
 
-    public Double getRate() {
-        return rate;
+    public Integer getUsefulLifeYears() {
+        return usefulLifeYears;
     }
 
-    public void setRate(Double rate) {
-        this.rate = rate;
+    public void setUsefulLifeYears(Integer usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
+    }
+
+    public Double getSalvageValue() {
+        return salvageValue;
+    }
+
+    public void setSalvageValue(Double salvageValue) {
+        this.salvageValue = salvageValue;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

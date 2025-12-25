@@ -2,43 +2,53 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "vendors", uniqueConstraints = @UniqueConstraint(columnNames = "vendorName"))
+@Table(name = "vendors")
 public class Vendor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @Column(unique = true)
     private String vendorName;
+    
     private String contactEmail;
+    
     private String phone;
+    
     private LocalDateTime createdAt;
-
+    
     @OneToMany(mappedBy = "vendor")
-    private Set<Asset> assets;
-
+    private Set<Asset> assets = new HashSet<>();
+    
     public Vendor() {}
-
+    
     public Vendor(String vendorName, String contactEmail, String phone) {
         this.vendorName = vendorName;
         this.contactEmail = contactEmail;
         this.phone = phone;
         this.createdAt = LocalDateTime.now();
     }
-
-    // getters and setters
+    
+    // Getters and setters
     public Long getId() { return id; }
-    public String getVendorName() { return vendorName; }
-    public String getContactEmail() { return contactEmail; }
-    public String getPhone() { return phone; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-
     public void setId(Long id) { this.id = id; }
+    
+    public String getVendorName() { return vendorName; }
     public void setVendorName(String vendorName) { this.vendorName = vendorName; }
+    
+    public String getContactEmail() { return contactEmail; }
     public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+    
+    public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
+    
+    public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    
+    public Set<Asset> getAssets() { return assets; }
+    public void setAssets(Set<Asset> assets) { this.assets = assets; }
 }

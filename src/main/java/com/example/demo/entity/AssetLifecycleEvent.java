@@ -4,17 +4,21 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "asset_lifecycle_events")
 public class AssetLifecycleEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String eventType;
+    private String eventType;          // CREATED, ASSIGNED, DISPOSED, etc.
+
     private String eventDescription;
+
     private LocalDateTime eventDate;
 
     @ManyToOne
+    @JoinColumn(name = "asset_id")
     private Asset asset;
 
     // ===== Getters & Setters =====
@@ -27,32 +31,28 @@ public class AssetLifecycleEvent {
         return eventType;
     }
 
-    public String getEventDescription() {
-        return eventDescription;
-    }
-
-    public LocalDateTime getEventDate() {
-        return eventDate;
-    }
-
-    public Asset getAsset() {
-        return asset;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setEventType(String eventType) {
         this.eventType = eventType;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
     }
 
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
     }
 
+    public LocalDateTime getEventDate() {
+        return eventDate;
+    }
+
     public void setEventDate(LocalDateTime eventDate) {
         this.eventDate = eventDate;
+    }
+
+    public Asset getAsset() {
+        return asset;
     }
 
     public void setAsset(Asset asset) {

@@ -12,48 +12,42 @@ public class Asset {
     private Long id;
 
     private String assetTag;
-
     private String name;
-
     private Double purchaseCost;
+    private String status;
 
     private LocalDateTime createdAt;
 
-    // ===== Getters & Setters =====
+    @ManyToOne
+    private Vendor vendor;
 
-    public Long getId() {
-        return id;
+    @ManyToOne
+    private DepreciationRule depreciationRule;
+
+    // ===== getters & setters =====
+
+    public Long getId() { return id; }
+
+    public String getAssetTag() { return assetTag; }
+    public void setAssetTag(String assetTag) { this.assetTag = assetTag; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public Double getPurchaseCost() { return purchaseCost; }
+    public void setPurchaseCost(Double purchaseCost) { this.purchaseCost = purchaseCost; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public Vendor getVendor() { return vendor; }
+    public void setVendor(Vendor vendor) { this.vendor = vendor; }
+
+    public DepreciationRule getDepreciationRule() { return depreciationRule; }
+    public void setDepreciationRule(DepreciationRule depreciationRule) {
+        this.depreciationRule = depreciationRule;
     }
 
-    public String getAssetTag() {
-        return assetTag;
-    }
-
-    public void setAssetTag(String assetTag) {
-        this.assetTag = assetTag;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getPurchaseCost() {
-        return purchaseCost;
-    }
-
-    public void setPurchaseCost(Double purchaseCost) {
-        this.purchaseCost = purchaseCost;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

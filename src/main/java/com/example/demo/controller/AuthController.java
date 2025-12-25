@@ -2,43 +2,60 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
+import com.example.demo.entity.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.util.JwtUtil;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
+    public AuthController(AuthenticationManager authenticationManager,
+                          JwtUtil jwtUtil,
+                          UserRepository userRepository) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
 
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
                 )
         );
 
-        UserDetails userDetails =
-                userDetailsService.loadUserByUsername(request.getUsername());
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         String token = jwtUtil.generateToken(userDetails);
 
-        return new AuthResponse(token);
+        User user = userRepository
+                .findByUsername(userDetails.getUsername())
+                .orElseThrow();
+
+        // ✅ THIS IS THE CRITICAL FIX
+        return new AuthResponse(
+                token,
+                user.getId(),
+                user.getUsername(),
+                user.getRoles()
+                        .stream()
+                        .map(role -> role.getName())
+                        .collect(Collectors.toSet())
+        );
     }
 }

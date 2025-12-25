@@ -1,11 +1,17 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "asset_disposals")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AssetDisposal {
 
     @Id
@@ -22,21 +28,4 @@ public class AssetDisposal {
 
     @ManyToOne
     private User approvedBy;
-
-    public AssetDisposal() {}
-
-    public AssetDisposal(Asset asset, String disposalMethod,
-                         Double disposalValue, LocalDate disposalDate, User approvedBy) {
-        this.asset = asset;
-        this.disposalMethod = disposalMethod;
-        this.disposalValue = disposalValue;
-        this.disposalDate = disposalDate;
-        this.approvedBy = approvedBy;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    // getters and setters
-    public Long getId() { return id; }
-    public Asset getAsset() { return asset; }
-    public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
 }

@@ -10,35 +10,33 @@ import java.util.List;
 
 @Service
 public class DepreciationRuleServiceImpl implements DepreciationRuleService {
-
-    private final DepreciationRuleRepository ruleRepository;
-
-    public DepreciationRuleServiceImpl(DepreciationRuleRepository ruleRepository) {
-        this.ruleRepository = ruleRepository;
+    
+    private final DepreciationRuleRepository depreciationRuleRepository;
+    
+    public DepreciationRuleServiceImpl(DepreciationRuleRepository depreciationRuleRepository) {
+        this.depreciationRuleRepository = depreciationRuleRepository;
     }
-
+    
     @Override
     public DepreciationRule createRule(DepreciationRule rule) {
-
-        if (rule.getUsefulLifeYears() == null || rule.getUsefulLifeYears() <= 0) {
+        if (rule.getUsefulLifeYears() <= 0) {
             throw new IllegalArgumentException("Useful life years must be greater than 0");
         }
-
-        if (rule.getSalvageValue() == null || rule.getSalvageValue() < 0) {
-            throw new IllegalArgumentException("Salvage value cannot be negative");
+        
+        if (rule.getSalvageValue() < 0) {
+            throw new IllegalArgumentException("Salvage value must be greater than or equal to 0");
         }
-
-        if (!rule.getMethod().equals("STRAIGHT_LINE")
-                && !rule.getMethod().equals("DECLINING_BALANCE")) {
-            throw new IllegalArgumentException("Invalid depreciation method");
+        
+        if (!"STRAIGHT_LINE".equals(rule.getMethod()) && !"DECLINING_BALANCE".equals(rule.getMethod())) {
+            throw new IllegalArgumentException("Method must be STRAIGHT_LINE or DECLINING_BALANCE");
         }
-
+        
         rule.setCreatedAt(LocalDateTime.now());
-        return ruleRepository.save(rule);
+        return depreciationRuleRepository.save(rule);
     }
-
+    
     @Override
     public List<DepreciationRule> getAllRules() {
-        return ruleRepository.findAll();
+        return depreciationRuleRepository.findAll();
     }
 }

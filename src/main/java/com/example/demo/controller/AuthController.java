@@ -5,13 +5,13 @@ import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.JwtUtil;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
@@ -39,23 +39,16 @@ public class AuthController {
                 )
         );
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        String token = jwtUtil.generateToken(userDetails);
+        String token = jwtUtil.generateToken(authentication.getPrincipal());
 
-        User user = userRepository
-                .findByUsername(userDetails.getUsername())
-                .orElseThrow();
-
-        // ✅ THIS IS THE CRITICAL FIX
         return new AuthResponse(
                 token,
                 user.getId(),
                 user.getUsername(),
-                user.getRoles()
-                        .stream()
-                        .map(role -> role.getName())
-                        .collect(Collectors.toSet())
+                Set.of("USER")
         );
     }
 }

@@ -1,16 +1,9 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "depreciation_rules")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class DepreciationRule {
 
     @Id
@@ -18,8 +11,41 @@ public class DepreciationRule {
     private Long id;
 
     private String ruleName;
-    private String method;
-    private Integer usefulLifeYears;
-    private Double salvageValue;
+    private Double rate;
+
     private LocalDateTime createdAt;
+
+    // ===== Getters & Setters =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public Double getRate() {
+        return rate;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

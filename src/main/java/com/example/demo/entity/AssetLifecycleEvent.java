@@ -1,11 +1,17 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "asset_lifecycle_events")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AssetLifecycleEvent {
 
     @Id
@@ -19,20 +25,4 @@ public class AssetLifecycleEvent {
 
     @ManyToOne
     private Asset asset;
-
-    public AssetLifecycleEvent() {}
-
-    public AssetLifecycleEvent(Asset asset, String eventType,
-                               String eventDescription, LocalDate eventDate) {
-        this.asset = asset;
-        this.eventType = eventType;
-        this.eventDescription = eventDescription;
-        this.eventDate = eventDate;
-        this.loggedAt = LocalDateTime.now();
-    }
-
-    // getters and setters
-    public Long getId() { return id; }
-    public void setAsset(Asset asset) { this.asset = asset; }
-    public void setLoggedAt(LocalDateTime loggedAt) { this.loggedAt = loggedAt; }
 }

@@ -14,6 +14,8 @@ public class User {
     
     private String name;
     
+    private String username;
+    
     @Column(unique = true)
     private String email;
     
@@ -34,6 +36,7 @@ public class User {
     
     public User(String name, String email, String password, Set<Role> roles) {
         this.name = name;
+        this.username = email; // Use email as username
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -46,6 +49,9 @@ public class User {
     
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+    
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
     
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

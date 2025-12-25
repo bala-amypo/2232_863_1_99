@@ -1,34 +1,23 @@
-package com.example.demo.entity;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import com.example.demo.entity.AssetLifecycleEvent;
+import com.example.demo.service.AssetLifecycleEventService;
+import org.springframework.web.bind.annotation.*;
 
-@Entity
-public class AssetLifecycleEvent {
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@RestController
+@RequestMapping("/api/lifecycle")
+public class AssetLifecycleEventController {
 
-    private String eventType;
-    private String eventDescription;
-    private LocalDateTime eventDate;
+    private final AssetLifecycleEventService service;
 
-    public String getEventType() { return eventType; }
-    public void setEventType(String eventType) { this.eventType = eventType; }
-
-    public String getEventDescription() { return eventDescription; }
-    public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;
+    public AssetLifecycleEventController(AssetLifecycleEventService service) {
+        this.service = service;
     }
 
-    public LocalDateTime getEventDate() { return eventDate; }
-    public void setEventDate(LocalDateTime eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    // compatibility method
-    public void setLoggedAt(LocalDateTime time) {
-        this.eventDate = time;
+    @GetMapping
+    public List<AssetLifecycleEvent> getAll() {
+        return service.getAllEvents();
     }
 }

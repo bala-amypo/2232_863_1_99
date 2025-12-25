@@ -9,6 +9,7 @@ import com.example.demo.util.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -39,10 +40,12 @@ public class AuthController {
                 )
         );
 
-        User user = userRepository.findByUsername(request.getUsername())
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        String token = jwtUtil.generateToken(authentication.getPrincipal());
+        String token = jwtUtil.generateToken(userDetails);
 
         return new AuthResponse(
                 token,

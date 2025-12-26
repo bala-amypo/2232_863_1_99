@@ -100,7 +100,7 @@
 
     </dependencies>
 
-    <!-- ✅ BUILD (DO NOT SET PLUGIN VERSION) -->
+    <!-- BUILD (DO NOT SET PLUGIN VERSION) -->
     <build>
         <plugins>
             <plugin>

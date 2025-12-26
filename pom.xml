@@ -84,7 +84,7 @@
             <version>2.5.0</version>
         </dependency>
 
-        <!-- ✅ TESTNG (CRITICAL FIX) -->
+        <!-- TESTNG (CRITICAL FIX) -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -114,7 +114,7 @@
                 </configuration>
             </plugin>
 
-            <!-- ✅ SUREFIRE WITH TESTNG -->
+            <!-- SUREFIRE WITH TESTNG -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

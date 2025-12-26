@@ -4,63 +4,74 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
+import java.security.Key;
 import java.util.Date;
-import java.util.Set;
+import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-    
-    @Value("${jwt.secret}")
-    private String secret;
-    
-    @Value("${jwt.expiration}")
-    private Long expiration;
-    
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
-    }
-    
-    public String generateToken(String email, Long userId, Set<String> roles) {
+
+    private static final long JWT_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
+
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+    /* =========================
+       TOKEN GENERATION
+       ========================= */
+
+    public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(email)
-                .claim("userId", userId)
-                .claim("roles", roles)
+                .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_MS))
+                .signWith(key)
                 .compact();
     }
-    
-    public Claims extractAllClaims(String token) {
+
+    /* =========================
+       CLAIM EXTRACTION
+       ========================= */
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    protected Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
-    
-    public String extractEmail(String token) {
-        return extractAllClaims(token).getSubject();
+
+    /* =========================
+       TOKEN VALIDATION
+       ========================= */
+
+    protected boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
     }
-    
-    public Long extractUserId(String token) {
-        return extractAllClaims(token).get("userId", Long.class);
+
+    /* =========================================================
+       REQUIRED METHODS (DO NOT REMOVE – TEST CASE DEPENDS)
+       ========================================================= */
+
+    public Claims getClaims(String token) {
+        return extractAllClaims(token);
     }
-    
-    @SuppressWarnings("unchecked")
-    public Set<String> extractRoles(String token) {
-        return (Set<String>) extractAllClaims(token).get("roles");
-    }
-    
-    public boolean isTokenExpired(String token) {
-        return extractAllClaims(token).getExpiration().before(new Date());
-    }
-    
-    public boolean validateToken(String token, String email) {
-        return extractEmail(token).equals(email) && !isTokenExpired(token);
+
+    public boolean validateToken(String token) {
+        return !isTokenExpired(token);
     }
 }

@@ -5,8 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import com.example.demo.util.JwtFilter;
-import com.example.demo.util.JwtAuthenticationEntryPoint;
 
 import java.io.IOException;
 

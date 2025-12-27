@@ -9,7 +9,7 @@ import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component   // 🔴 REQUIRED
+@Component   // REQUIRED
 public class JwtUtil {
 
     private final Key key =

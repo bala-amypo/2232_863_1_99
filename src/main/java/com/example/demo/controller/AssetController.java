@@ -1,9 +1,3 @@
-package com.example.demo.controller;
-
-import com.example.demo.entity.Asset;
-import com.example.demo.service.AssetService;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/api/assets")
 public class AssetController {

@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Asset;
+import com.example.demo.entity.*;
 import com.example.demo.service.AssetService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +16,12 @@ public class AssetController {
 
     @PostMapping
     public Asset create(@RequestBody Asset asset) {
-        return assetService.createAsset(asset, null, null);
+
+        // TEMPORARY: vendor & rule already set in request JSON
+        return assetService.createAsset(
+                asset,
+                asset.getVendor(),
+                asset.getDepreciationRule()
+        );
     }
 }

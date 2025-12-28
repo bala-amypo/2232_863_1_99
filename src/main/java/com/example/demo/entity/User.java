@@ -1,13 +1,15 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,12 +21,14 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String username;
-
-    @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinTable(
         name = "user_roles",
         joinColumns = @JoinColumn(name = "user_id"),
@@ -32,69 +36,67 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    // ---------- Constructors ----------
+    @OneToMany(mappedBy = "approvedBy")
+    @JsonIgnore
+    private Set<AssetDisposal> approvedDisposals = new HashSet<>();
 
-    public User() {
-    }
+    public User() {}
 
-    public User(String name, String email, String username, String password) {
+    public User(String name, String email, String password, Set<Role> roles) {
         this.name = name;
         this.email = email;
-        this.username = username;
         this.password = password;
+        this.roles = roles;
+        this.createdAt = LocalDateTime.now();
     }
 
-    // ---------- Getters & Setters ----------
-
-    public Long getId() {
+    // Getters and setters
+    public Long getId() { 
         return id;
     }
-
     public void setId(Long id) {
-        this.id = id;
+        this.id = id; 
     }
 
     public String getName() {
-        return name;
+        return name; 
+    }
+    public void setName(String name) { 
+        this.name = name; 
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getEmail() { 
+        return email; 
+    }
+    public void setEmail(String email) { 
+        this.email = email; 
     }
 
-    public String getEmail() {
-        return email;
+    public String getPassword() { 
+        return password; 
+    }
+    public void setPassword(String password) { 
+        this.password = password; 
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public LocalDateTime getCreatedAt() { 
+        return createdAt; 
+    }
+    public void setCreatedAt(LocalDateTime createdAt) { 
+        this.createdAt = createdAt; 
     }
 
-    public String getUsername() {
-        return username;
+    public Set<Role> getRoles() { 
+        return roles; 
+    }
+    public void setRoles(Set<Role> roles) { 
+        this.roles = roles; 
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public Set<AssetDisposal> getApprovedDisposals() { 
+        return approvedDisposals; 
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void addRole(Role role) {
-        this.roles.add(role);
+    public void setApprovedDisposals(Set<AssetDisposal> approvedDisposals) { 
+        this.approvedDisposals = approvedDisposals; 
     }
 }

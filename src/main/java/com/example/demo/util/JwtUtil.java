@@ -28,7 +28,7 @@ public class JwtUtil {
     public String generateToken(String email, Long userId, Set<String> roles) {
         return Jwts.builder()
                 .setSubject(email)                 // subject
-                .claim("email", email)             // ✅ REQUIRED for test
+                .claim("email", email)             // REQUIRED for test
                 .claim("userId", userId)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())

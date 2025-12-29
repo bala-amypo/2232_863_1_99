@@ -105,9 +105,14 @@
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-testng</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.2.5</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                <suiteXmlFiles>
+                    <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                </suiteXmlFiles>
+            </configuration>
             </plugin>
         </plugins>
     </build>

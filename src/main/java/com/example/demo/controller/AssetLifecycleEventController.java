@@ -1,15 +1,25 @@
 package com.example.demo.controller;
-import com.example.demo.entity.AssetLifecycleEvent;
-import com.example.demo.service.AssetLifecycleEventService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-@RestController @RequestMapping("/api/events")
+import com.example.demo.entity.AssetLifecycleEvent;
+import com.example.demo.service.impl.AssetLifecycleEventServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/events")
+@RequiredArgsConstructor
 public class AssetLifecycleEventController {
-    private final AssetLifecycleEventService service;
-    public AssetLifecycleEventController(AssetLifecycleEventService service) { this.service = service; }
-    @PostMapping("/{assetId}") public ResponseEntity<AssetLifecycleEvent> create(@PathVariable Long assetId, @RequestBody AssetLifecycleEvent event) {
-        return ResponseEntity.ok(service.logEvent(assetId, event));
+    private final AssetLifecycleEventServiceImpl service;
+
+    @PostMapping("/{assetId}")
+    public AssetLifecycleEvent create(@PathVariable Long assetId, @RequestBody AssetLifecycleEvent e) {
+        return service.logEvent(assetId, e);
     }
-    @GetMapping("/asset/{assetId}") public ResponseEntity<?> getByAsset(@PathVariable Long assetId) { return ResponseEntity.ok(service.getEvents(assetId)); }
+
+    @GetMapping("/asset/{assetId}")
+    public List<AssetLifecycleEvent> get(@PathVariable Long assetId) {
+        // FIX: The method name in the service is 'getEventsForAsset'
+        return service.getEventsForAsset(assetId);
+    }
 }
